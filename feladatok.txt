@@ -1,0 +1,69 @@
+Docker workshop feladatok
+
+A feladatok jellemzően emelkedő nehézségűek. Olyan feladatokat válassz, amik kihívást jelentenek, de azért megoldhatónak tartod őket. A nehezebb setup-okat (vagy akár az összeset) célszerű lehet csoportosan (2-3 fő) megoldani.
+Lehetőség szerint – legalábbis első lépésben – ne keressünk “kész megoldást” az interneten (pl. ChatGPT). Fennakadás esetén első körben kérd az oktató segítségét!
+
+1. PLEX
+A Plex (https://www.plex.tv/) egy média szerver alkalmazás. A háttértáron található, elsősorban videó anyagokat a Plex alkalmazásra (pl. Android, de lehet egy browser is) tudja továbbítani. Hivatalos  (plexinc által kiadott) docker image-e megtalálható a docker hub-on.
+Feladat:
+A) A “docker run” felhasználásával az alkalmazás elindítása és kipróbálása.
+B) Futtatás “docker compose” segítségével, docker-compose.yml file létrehozása.
+C) Mount-oljunk egy külső könyvtárat a container-be, ahol a média file-okat tároljuk!
+Megjegyzés: indítás után a Plex elvileg a 32400 porton lesz elérhető.
+
+2. Portainer
+A “portainer” egy WEB UI/Dashboard docker környezet – sima vagy Swarm – managelésére.
+Keressük meg, installáljuk fel, próbáljuk ki! Ha tudjuk, akkor oldjuk meg, hogy ne HTTP-n, hanem HTTPS-en legyen elérhető!
+
+3. qBittorrent
+A qBittorrent (https://www.qbittorrent.org/) egy GUI-val ellátott bittorrent alkalmazás (bittorrent kliens). A megadott torrent file-ok, magnet url-ek, stb. letöltésére, seed-elésére szolgál. 
+Feladat:
+A) A “docker run” felhasználásával az alkalmazás elindítása és kipróbálása
+B) Futtatás “docker compose” segítségével, docker-compose.yml file-on keresztül.
+C) Mount-oljunk egy külső könyvtárat az alkalmazás számára, ahol a file-okat kezeli!
+Megjegyzés: ez az alkalmazást is egy böngészőn át lesz elérhető.
+Segítség: használhatjuk pl. a “linuxserver” által kiadott docker image-t.
+
+4. Python-Flask alkalmazás
+Készítsünk egy egyszerű Python alkalmazást a Flask (https://flask.palletsprojects.com/) csomagra építve, ami egy “Hello, World”-öt szolgál ki HTTP-n.
+A) Egy tetszőleges porton, akár docker run, akár compose használatával.
+B) Compose használatával indítsunk el egy (tetszőleges) adatbázisszervert (pl. MySQL) is az alkalmazás mellett, tegyünk valami adatot az adatbázisba, olvassuk ki, és jelenígsük meg az oldalon!
+Alternatíva: Python-Flask helyett más nyelvet és framework-öt is használhatunk, pl. Node.js, Tomcat, stb. – amit esetleg ismerünk.
+
+5. Távoli adattöltés
+Indítsunk el egy szerveren dockerből egy MySQL vagy MariaDB alkalmazást (szerver).
+Egy másik szeverről, szintén docker segítségével, töltsünk be vagy egy SQL dump-ot, vagy egy CSV file-t ebbe az adatbázisba!
+Megjegyzés: ez alapvetően (legalább) 2 fős feladat, 2 szerver kell hozzá.
+Opcionális: bármilyen adatbáziskezelőt használhatunk (MongoDB, ClickHouse, Cassandra, stb...)
+
+6. Apache Superset
+Az Apache Superset ( https://superset.apache.org/docs/intro/ ) egy BI alkalmazás, amivel elsősorban (big data) adatbázisok ad-hoc vizualizációját tudjuk elvégezni.
+Ez a feladat elég szabad: docker segígségével fogjunk valamilyen adatbáziskezelőt, rakjunk bele valamilyen adatot, és futtassuk rajta a Superset-et! (Webes felület ez is.)
+Lásd: https://hub.docker.com/r/apache/superset
+
+7. MariaDB replikáció
+A MariaDB adatbáziskezelő tud master-slave replikációban dolgozni, ami kb. azt jelenti, hogy az egyik szerverre írt adatok automatikusan a másik szerverre is tükröződnek. Ehhez az üzemmódhoz célszerű két szerveren egy-egy MariaDB-t indítanunk, és az egyiket master, a másikat slave módba konfigurálni (https://mariadb.com/kb/en/setting-up-replication/)
+Állítsük össze ezt a konfigurációt docker segítségével, ideális esetben – de nem feltétlenül – compose használatával!
+Megjegyzés: szintén legalább 2 fős feladat. Ne feledjük a portok kinyitását!
+
+8. SSL Registry
+Készítettünk egy privát docker registry -t, de az 5000-es porton üzemeltetve, ami nem biztonságos (HTTP) protokolt használ. A feladat SSL (HTTPS) használata. Ahhoz, hogy ez működjön, egy ún. SSL proxy-t (tipikusan: nginx) kell a registry elé helyeznünk. Oldjuk ezt meg – természetesen docker-t használjunk!
+Segítség:
+- Az SSL-hez szükséges certificate-et szerezzük be a Let’s Encrypt szolgáltatótól.
+- Ehhez szükségünk lesz valami ilyesmire: https://hub.docker.com/r/nginxproxy/acme-companion
+
+9. TIC(K) Stack
+Az ún. “TICK Stack” négy alkalmazás házasítása: Telegraf, InfluxDB, Chronograf, Kapacitor. Ez a gyakran használt kombináció rendszerek (szerverek) monitorozását teszi lehetővé: a különféle metrikákat összegyűjtjük (Telegraf), egy time-series adatbázisban tároljuk (InfluxDB), grafikusan megjelenítjük (Chronograf), illetve anomálik esetén értesítéseket küldünk (Kapacitor).
+Feladat:
+Docker compose-t használva egy ilyen stack felépítése és kipróbálása. (A “Kapacitor” komponens nem szükséges.)
+
+10. Local LLM
+Válasszunk egy minimális méretű LLM modelt – például a DeepSeek-R1 1.5B -t – és készítsünk magunknak egy saját, lokális “AI Bot”-ot!
+Keressünk valami olyan futtatókörnyezetet, amit docker-ben tudunk használni (pl. ollama).
+
+11. Minikube
+Kísérletezzünk Kubernetes környezetben!
+A szerverünkre installáljunk egy “minikube” -ot, docker back-end-del!
+Ebbe a környezetbe deploy-oljunk egy webszervert, valamilyen tetszőleges application back-end-et (pl. PHP, Pyhton, Node.JS, Tomcat, stb…), ami mond nekünk egy hello world-öt!
+
+
